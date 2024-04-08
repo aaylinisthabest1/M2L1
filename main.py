@@ -1,3 +1,5 @@
+import discord
+from discord.ext import commands
 import random
 
 # Let's assume we have some memes categorized into themes
@@ -19,6 +21,26 @@ memes_rarity = {
     "science_meme2.jpg": 5,
     "science_meme3.jpg": 4
 }
+
+bot = commands.Bot(command_prefix='$')
+
+@bot.command()
+async def rare_meme(ctx, theme):
+    if theme not in memes:
+        await ctx.send("Theme not found")
+        return
+    
+    rarest_meme = get_rare_meme(theme)
+    await ctx.send(f"The rarest meme in the theme {theme} is: {rarest_meme}")
+
+@bot.command()
+async def random_meme(ctx, theme):
+    if theme not in memes:
+        await ctx.send("Theme not found")
+        return
+    
+    random_meme = get_random_meme(theme)
+    await ctx.send(f"A random meme in the theme {theme} is: {random_meme}")
 
 def get_rare_meme(theme):
     if theme not in memes:
@@ -42,10 +64,5 @@ def get_random_meme(theme):
     
     return random.choice(memes[theme])
 
-# Example usage of functions
-selected_theme = "animals"  # Selecting the theme "animals"
-rare_meme = get_rare_meme(selected_theme)
-print("The rarest meme in the theme", selected_theme, "is:", rare_meme)
+bot.run('TOKEN')
 
-random_meme = get_random_meme(selected_theme)
-print("A random meme in the theme", selected_theme, "is:", random_meme)
